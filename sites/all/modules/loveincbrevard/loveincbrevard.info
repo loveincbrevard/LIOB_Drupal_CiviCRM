@@ -1,0 +1,13 @@
+name = Love INC Brevard Custom Module
+description = Love INC Brevard Custom Module.
+core = 7.x
+package = Custom
+dependencies[] = civicrm (>=4.4)
+dependencies[] = webform (>=4.0)
+dependencies[] = libraries
+dependencies[] = options_element
+
+version = "1.0"
+core = "7.x"
+project = "loveincbrevard"
+
