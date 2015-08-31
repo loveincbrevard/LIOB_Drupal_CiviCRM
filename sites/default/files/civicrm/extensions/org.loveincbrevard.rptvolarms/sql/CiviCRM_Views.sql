@@ -96,4 +96,40 @@ LEFT OUTER JOIN civicrm_address a ON c.id = a.contact_id AND a.is_primary = 1
 LEFT OUTER JOIN civicrm_state_province sp ON a.state_province_id = sp.id
 GROUP BY c.id;
 
+CREATE OR REPLACE VIEW v_civicrm_option_group_value AS
+SELECT og.id option_group_id,
+og.name option_group_name,
+og.title option_group_title,
+og.description option_group_description,
+ov.id option_value_id,
+ov.value option_value,
+ov.name option_value_name,
+ov.label option_value_label,
+ov.description option_value_description
+FROM civicrm_option_group og
+JOIN civicrm_option_value ov ON (og.id = ov.option_group_id AND og.is_active = 1 AND ov.is_active = 1)
+ORDER BY og.name, ov.name;
 
+CREATE OR REPLACE VIEW v_civicrm_rpt_contact_email_website AS
+SELECT c.id contact_id,
+CONCAT (
+GROUP_CONCAT(
+DISTINCT IF(c.do_not_email = 1, '', IFNULL(CONCAT(e.email, ' (',SUBSTR(lte.display_name, 1, 1), ')','<br>\r\n'), '')) 
+ORDER BY e.is_primary DESC SEPARATOR ''
+),
+GROUP_CONCAT(
+DISTINCT IFNULL(CONCAT(w.url, ' (',SUBSTR(ogv.option_value_label, 1, 1), ')', '<br>\r\n'), '')
+ORDER BY ogv.option_value ASC SEPARATOR ''
+)
+) email_website
+FROM 
+civicrm_contact c
+LEFT OUTER JOIN civicrm_email e ON c.id = e.contact_id
+LEFT OUTER JOIN civicrm_website w ON c.id = w.contact_id
+LEFT OUTER JOIN civicrm_location_type lte ON e.location_type_id = lte.id
+LEFT OUTER JOIN v_civicrm_option_group_value ogv ON w.website_type_id = ogv.option_value AND ogv.option_group_title = 'Website Type'
+/*
+WHERE
+c.contact_type = 'Organization' AND c.contact_sub_type = 'Church'
+*/
+GROUP BY c.id;
