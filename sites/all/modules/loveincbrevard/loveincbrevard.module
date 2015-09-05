@@ -18,8 +18,8 @@
 
 function loveincbrevard_webform_component_render_alter(&$element, &$component) {
   if (strcmp($element['#webform_component']['form_key'], 'civicrm_1_activity_1_cg10_custom_47') == 0) {
-		drupal_add_js(drupal_get_path('module', 'loveincbrevard').'/js/loveincbrevard.js', 'file');
-  }
+		drupal_add_js(drupal_get_path('module', 'loveincbrevard').'/js/loveincbrevard.js', array('type' => 'file','scope' => 'footer','weight' =>5));
+	}
 }
    
 /**
