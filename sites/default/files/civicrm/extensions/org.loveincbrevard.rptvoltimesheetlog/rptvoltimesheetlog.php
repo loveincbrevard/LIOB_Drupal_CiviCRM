@@ -33,7 +33,8 @@
  *
  */
 class org_loveincbrevard_rptvoltimesheetlog extends CRM_Volunteer_Form_VolunteerReport {
-  function __construct() {
+
+ function __construct() {
   	 parent::__construct();
 		 $time_completed_minutes = $this->customFields['time_completed_minutes']['column_name'];
 		 $this->_columns['time_completed']['fields']['time_hrs_mins_completed'] = 
@@ -44,9 +45,9 @@ class org_loveincbrevard_rptvoltimesheetlog extends CRM_Volunteer_Form_Volunteer
 	        'default' => TRUE,
 	      );
 	}
-	
+
   function statistics(&$rows) {
-  	$statistics = parent::statistics(&$rows);
+  	$statistics = parent::statistics($rows);
 		$completed_mins = $statistics['counts']['completed']['value'];
 		$completed_hrs_mins = floor($completed_mins / 60) . ' hrs. ' . ($completed_mins % 60) . ' mins.';
     $statistics['counts']['completed_hrs_mins'] = array(
@@ -54,6 +55,7 @@ class org_loveincbrevard_rptvoltimesheetlog extends CRM_Volunteer_Form_Volunteer
       'value' => $completed_hrs_mins,
       'type' => CRM_Utils_Type::T_STRING,
     );
+
     return $statistics;
-	}	
+	}
 }
