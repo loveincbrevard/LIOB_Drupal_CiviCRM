@@ -34,27 +34,27 @@
  */
 class org_loveincbrevard_rptvoltimesheetlog extends CRM_Volunteer_Form_VolunteerReport {
 
-	function __construct() {
-		 parent::__construct();
-		 $time_completed_minutes = $this->customFields['time_completed_minutes']['column_name'];
-		 $this->_columns['time_completed']['fields']['time_hrs_mins_completed'] = 
-		 array(
-			'title' => ts('Time Completed Hrs. & Mins.'),
-			'dbAlias' => "CONCAT(FORMAT(FLOOR({$time_completed_minutes}/ 60),0), ' hrs. ', ({$time_completed_minutes} % 60), ' mins.')",
-			'no_repeat' => TRUE,
-			'default' => TRUE,
-		);
-	}
+  function __construct() {
+     parent::__construct();
+     $time_completed_minutes = $this->customFields['time_completed_minutes']['column_name'];
+     $this->_columns['time_completed']['fields']['time_hrs_mins_completed'] = 
+     array(
+      'title' => ts('Time Completed Hrs. & Mins.'),
+      'dbAlias' => "CONCAT(FORMAT(FLOOR({$time_completed_minutes}/ 60),0), ' hrs. ', ({$time_completed_minutes} % 60), ' mins.')",
+      'no_repeat' => TRUE,
+      'default' => TRUE,
+    );
+  }
 
   function statistics(&$rows) {
-		$statistics = parent::statistics($rows);
-		$completed_mins = $statistics['counts']['completed']['value'];
-		$completed_hrs_mins = floor($completed_mins / 60) . ' hrs. ' . ($completed_mins % 60) . ' mins.';
-		$statistics['counts']['completed_hrs_mins'] = array(
-			'title' => ts('Total Time Completed in Hrs. & Mins.'),
-			'value' => $completed_hrs_mins,
-			'type' => CRM_Utils_Type::T_STRING,
-		);
-		return $statistics;
-	}
+    $statistics = parent::statistics($rows);
+    $completed_mins = $statistics['counts']['completed']['value'];
+    $completed_hrs_mins = floor($completed_mins / 60) . ' hrs. ' . ($completed_mins % 60) . ' mins.';
+    $statistics['counts']['completed_hrs_mins'] = array(
+      'title' => ts('Total Time Completed in Hrs. & Mins.'),
+      'value' => $completed_hrs_mins,
+      'type' => CRM_Utils_Type::T_STRING,
+    );
+    return $statistics;
+  }
 }
