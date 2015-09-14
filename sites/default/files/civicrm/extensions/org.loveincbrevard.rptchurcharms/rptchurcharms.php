@@ -65,6 +65,11 @@ class org_loveincbrevard_rptchurcharms extends CRM_Report_Form {
 						'no_display' => TRUE,
 					),
 	      ),
+        'filters' => array(
+          'partnership_type' => array(
+          'name' => 'partnership_type', 
+          'title' => ts('Partnership Type')),
+        ),
 	      'grouping' => 'group-fields',
 	      'order_bys' => array(
           'partnership_type' => array(
@@ -112,6 +117,29 @@ class org_loveincbrevard_rptchurcharms extends CRM_Report_Form {
           ),
         ),
       ),
+      
+      'civicrm_group2' => array(
+        'dao' => 'CRM_Contact_DAO_GroupContact',
+        'fields' => array(
+          'category_type' => array(
+            'name' => 'category_type',
+            'title' => ts('Category'),
+            'dbAlias' => "CASE cgroup_civireport.title WHEN 'Partnerships Church Ministry Partner' THEN 'Partner' WHEN 'Partnerships Church All' THEN 'Partner' WHEN 'Network' THEN 'Network' ELSE 'Other' END ",
+          ),
+        ),
+        'filters' => array(
+          'category_type' => array(
+          'name' => 'category_type', 
+          'title' => ts('Category')),
+        ),
+        'grouping' => 'group-fields',
+        'order_bys' => array(
+          'category_type' => array(
+            'name' => 'category_type',
+            'title' => ts('Category'),
+          ),
+        ),
+      ), 
       
       'civicrm_contact_pastor' => array(
         'dao' => 'CRM_Contact_DAO_Contact',
@@ -302,7 +330,7 @@ class org_loveincbrevard_rptchurcharms extends CRM_Report_Form {
             elseif ($tableName == 'civicrm_phone') {
               $this->_phoneField = TRUE;
             }
-            elseif ($tableName == 'civicrm_group') {
+            elseif ($tableName == 'civicrm_group' || 'civicrm_group2') {
               $this->_groupField = TRUE;
             }
 
@@ -388,7 +416,7 @@ class org_loveincbrevard_rptchurcharms extends CRM_Report_Form {
     				AND {$this->_aliases['civicrm_address2']}.is_primary = 1) ";
 		}
 				
-	  if ($this->isTableSelected('civicrm_group')) {
+	  if ($this->isTableSelected('civicrm_group') || $this->isTableSelected('civicrm_group2')) {
 			$group_filters = CRM_Utils_Array::value("gid_value", $this->_params);
 			$group_filters_clause = "";
 			if (!empty($group_filters)) {
