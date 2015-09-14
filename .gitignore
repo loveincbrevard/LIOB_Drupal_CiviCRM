@@ -2,18 +2,21 @@
 sites/*/settings*.php
 
 # Ignore paths that contain user-generated content.
-sites/*/files/civicrm/ConfigAndLog
-sites/*/files/civicrm/custom
-sites/*/files/civicrm/extensions/cache
-sites/*/files/civicrm/extensions/uk.co.vedaconsulting.mailchimp-1.7
-sites/*/files/civicrm/extensions/org.civicrm.volunteer-4.5-1.4.0
-sites/*/files/civicrm/persist
-sites/*/files/civicrm/templates_c
-sites/*/files/civicrm/upload
-sites/*/files/ctools
-sites/*/files/pictures
-sites/*/files/*.jpg
-sites/*/files/*.png
+sites/*/files
+!sites/*/files/civicrm/extensions/org.civicrm.volunteer-4.5-1.4.0/CRM/Volunteer/Form/Log.php
+!sites/*/files/civicrm/extensions/org.loveincbrevard.*
+#sites/*/files/civicrm/ConfigAndLog
+#sites/*/files/civicrm/custom
+#sites/*/files/civicrm/extensions/cache
+#sites/*/files/civicrm/extensions/uk.co.vedaconsulting.mailchimp-1.7
+#sites/*/files/civicrm/extensions/org.civicrm.volunteer-4.5-1.4.0
+#sites/*/files/civicrm/persist
+#sites/*/files/civicrm/templates_c
+#sites/*/files/civicrm/upload
+#sites/*/files/ctools
+#sites/*/files/pictures
+#sites/*/files/*.jpg
+#sites/*/files/*.png
 
 sites/*/private
 .htaccess
