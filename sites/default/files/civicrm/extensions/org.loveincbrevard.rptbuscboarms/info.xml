@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<extension key="org.loveincbrevard.rptbuscboarms" type="report">
+  <file>rptbuscboarms</file>
+  <name>ARMS Business and Agency Report</name>
+  <description>ARMS Business and Agency Report</description>
+  <license>AGPL-3.0</license>
+  <maintainer>
+    <author>civicrm_lead</author>
+    <email>civicrm_lead@loveincbrevard.com</email>
+  </maintainer>
+  <urls>
+    <url desc="Main Extension Page">http://loveincbrevard.org</url>
+    <url desc="Documentation">http://loveincbrevard.org</url>
+    <url desc="Support">http://loveincbrevard.org</url>
+    <url desc="Licensing">http://loveincbrevard.org</url>
+  </urls>
+  <releaseDate>2015-09-30</releaseDate>
+  <version>1.0</version>
+  <develStage>alpha</develStage>
+  <compatibility>
+    <ver>4.2</ver>
+  </compatibility>
+  <comments>ARMs Business and Agency Report</comments>
+  <civix/>
+  <typeInfo>
+    <component>Contact</component>
+    <reportUrl>org.loveincbrevard.rptbuscboarms</reportUrl>
+  </typeInfo>
+</extension>
