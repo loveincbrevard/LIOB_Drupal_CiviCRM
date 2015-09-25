@@ -133,3 +133,43 @@ WHERE
 c.contact_type = 'Organization' AND c.contact_sub_type = 'Church'
 */
 GROUP BY c.id;
+
+CREATE OR REPLACE VIEW v_civicrm_rpt_contact_emails AS
+SELECT c.id contact_id,
+c.display_name full_name,
+GROUP_CONCAT(DISTINCT 
+CONCAT(e.email, ' (',SUBSTR(lt2.display_name, 1, 1),  ')')  ORDER BY e.is_primary DESC SEPARATOR '<br>\r\n') emails
+FROM 
+civicrm_contact c
+LEFT OUTER JOIN civicrm_email e ON c.id = e.contact_id
+LEFT OUTER JOIN civicrm_location_type lt2 ON e.location_type_id = lt2.id
+GROUP BY c.id;
+
+CREATE OR REPLACE VIEW  v_civicrm_rpt_contact_phone_email AS
+SELECT c.id contact_id,
+c.display_name full_name, 
+CONCAT(
+  IF(c.do_not_phone = 1, '', CONCAT('<br>\r\n', p.phone, ' (',SUBSTR(ltp.display_name, 1, 1), ')')),
+  IF(c.do_not_email = 1, '', CONCAT('<br>\r\n', e.email, ' (',SUBSTR(lte.display_name, 1, 1), ')'))
+) name_phone_email
+FROM 
+civicrm_contact c
+LEFT OUTER JOIN civicrm_phone p ON c.id = p.contact_id
+LEFT OUTER JOIN civicrm_email e ON c.id = e.contact_id
+LEFT OUTER JOIN civicrm_location_type lte ON e.location_type_id = lte.id
+LEFT OUTER JOIN civicrm_location_type ltp ON p.location_type_id = ltp.id
+WHERE e.is_primary = 1
+AND p.is_primary = 1
+AND c.contact_type = 'Individual'
+GROUP BY c.id;
+
+CREATE OR REPLACE VIEW v_civicrm_rpt_contact_tags AS
+SELECT c.id contact_id,
+c.display_name full_name,
+GROUP_CONCAT(DISTINCT t.name ORDER BY t.name SEPARATOR '/') tags
+FROM 
+civicrm_contact c
+LEFT OUTER JOIN civicrm_entity_tag et ON c.id = et.entity_id AND et.entity_table = 'civicrm_contact'
+LEFT OUTER JOIN civicrm_tag t ON et.tag_id = t.id
+GROUP BY c.id;
+
