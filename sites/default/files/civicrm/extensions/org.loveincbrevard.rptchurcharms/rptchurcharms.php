@@ -368,7 +368,7 @@ class org_loveincbrevard_rptchurcharms extends CRM_Report_Form {
 		if ($this->isTableSelected('civicrm_contact_pastor')) {
       $this->_from .= "
         LEFT OUTER JOIN v_civicrm_rpt_contact_relationships pastor_cr  
-        	ON ({$this->_aliases['civicrm_contact']}.id = pastor_cr.contact_id AND pastor_cr.rel_type_name = 'Lead Pastor of')
+        	ON ({$this->_aliases['civicrm_contact']}.id = pastor_cr.contact_id AND pastor_cr.rel_type_name = 'Lead Pastor is')
 				LEFT OUTER JOIN v_civicrm_rpt_contact_name_phone_email {$this->_aliases['civicrm_contact_pastor']} 
 					ON (pastor_cr.rel_contact_id = {$this->_aliases['civicrm_contact_pastor']}.contact_id)
       ";
@@ -377,7 +377,7 @@ class org_loveincbrevard_rptchurcharms extends CRM_Report_Form {
 		if ($this->isTableSelected('civicrm_contact_cmc')) {
       $this->_from .= "
         LEFT OUTER JOIN v_civicrm_rpt_contact_relationships cmc_cr
-        	ON ({$this->_aliases['civicrm_contact']}.id = cmc_cr.contact_id AND cmc_cr.rel_type_name = 'CMC of')
+        	ON ({$this->_aliases['civicrm_contact']}.id = cmc_cr.contact_id AND cmc_cr.rel_type_name = 'CMC is')
         LEFT OUTER JOIN v_civicrm_rpt_contact_name_phone_email {$this->_aliases['civicrm_contact_cmc']} 
         ON (cmc_cr.rel_contact_id = {$this->_aliases['civicrm_contact_cmc']}.contact_id)
       ";
