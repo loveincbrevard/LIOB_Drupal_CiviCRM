@@ -9,9 +9,9 @@ Drupal.behaviors.loveincbrevard = {
 			$(".minute.form-select").change(function(){set_time_completed_in_minutes();}); 
 			$(".form-item-submitted-civicrm-1-activity-1-activity-activity-date-time-timepart-ampm").change(function(){set_time_completed_in_minutes($(this));});
 			$(".form-item-submitted-activity-end-time-ampm").change(function(){set_time_completed_in_minutes($(this));});
-			$("#webform-client-form-2").validate();
-			$("#edit-submitted-civicrm-1-activity-1-cg10-custom-47").rules("add", {min:1 ,messages: {min:"Activity End Date Time is earlier than Activity Start Date Time.  Please correct before submitting."}});
-			$( "#webform-client-form-2" ).validate({rules: {"#edit-submitted-civicrm-1-activity-1-cg10-custom-47": {required: true,min: 1}}});
+			$("#webform-client-form-2").submit(function() {
+         return set_time_completed_in_minutes();
+      });
 			
 			function set_time_completed_in_minutes() {
 					var startDateTimeYear =  $("#edit-submitted-civicrm-1-activity-1-activity-activity-date-time-year").val();
@@ -42,8 +42,11 @@ Drupal.behaviors.loveincbrevard = {
 			  	totalMinutes = (endDateTime.getTime() - startDateTime.getTime()) / 60000; 
 			  	$("#edit-submitted-civicrm-1-activity-1-cg10-custom-47").val(totalMinutes);
 			  	$("#edit-submitted-total-time").val((Math.floor(totalMinutes / 60) + " hours " + Math.floor(totalMinutes % 60) + " mins."));
-			  	if (totalMinutes < 0) 
+			  	if (totalMinutes < 0) { 
 			  		alert("Activity End Date Time is earlier than Activity Start Date Time.  Please correct before submitting.");
+			  		return false;
+			  	}
+			  	return true;
 			}
 		}
 	};
