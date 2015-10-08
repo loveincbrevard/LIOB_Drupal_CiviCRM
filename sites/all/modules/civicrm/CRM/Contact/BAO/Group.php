@@ -302,12 +302,17 @@ class CRM_Contact_BAO_Group extends CRM_Contact_DAO_Group {
    *
    * @param int $id
    *   The id of the object.
+   * @param bool $excludeHidden
+   *   Should hidden groups be excluded.
+   *   Logically this is the wrong place to filter hidden groups out as that is
+   *   not a permission issue. However, as other functions may rely on that defaulting to
+   *   FALSE for now & only the api call is calling with true.
    *
-   * @return string
-   *   the permission that the user has (or NULL)
+   * @return array
+   *   The permission that the user has (or NULL)
    */
-  public static function checkPermission($id) {
-    $allGroups = CRM_Core_PseudoConstant::allGroup();
+  public static function checkPermission($id, $excludeHidden = FALSE) {
+    $allGroups = CRM_Core_PseudoConstant::allGroup(NULL, $excludeHidden);
 
     $permissions = NULL;
     if (CRM_Core_Permission::check('edit all contacts') ||
@@ -790,10 +795,10 @@ class CRM_Contact_BAO_Group extends CRM_Contact_DAO_Group {
       $params['rowCount'] > 0
     ) {
       $limit = " LIMIT {$params['offset']}, {$params['rowCount']} ";
-    } else {
-	    // JCN
-    	$limit = "";
-    }
+      } else {
+      // JCN
+      $limit = "";
+      }
 
     $orderBy = ' ORDER BY groups.title asc';
     if (!empty($params['sort'])) {
@@ -870,7 +875,9 @@ class CRM_Contact_BAO_Group extends CRM_Contact_DAO_Group {
         );
         CRM_Core_DAO::storeValues($object, $values[$object->id]);
         // Wrap with crm-editable. Not an ideal solution.
-        $values[$object->id]['title'] = '<span class="crm-editable crmf-title">' . $values[$object->id]['title'] . '</span>';
+        if (in_array(CRM_Core_Permission::EDIT, $groupPermissions)) {
+          $values[$object->id]['title'] = '<span class="crm-editable crmf-title">' . $values[$object->id]['title'] . '</span>';
+        }
 
         if ($object->saved_search_id) {
           $values[$object->id]['title'] .= ' (' . ts('Smart Group') . ')';
