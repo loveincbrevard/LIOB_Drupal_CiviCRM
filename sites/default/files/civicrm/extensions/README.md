@@ -1,6 +1,6 @@
 # CiviCRM_Extensions
 
-## Contains the CiviCRM Report Template PHP code as wel as bug fixes for the CiviCRM Volunteer Extension
+## Contains the CiviCRM Report Template PHP code as well as bug fixes for the CiviCRM Volunteer Extension
 
 ### Below is the hierarchy:
 
@@ -8,5 +8,5 @@
 #### org.loveincbrevard.rptbuscboarms - The Report Template PHP code for the ARMS Business and Agency Report.
 #### org.loveincbrevard.rptchurcharms - The Report Template PHP code for the ARMS Church related Reports.
 #### org.loveincbrevard.rptvolarms - The Report Template PHP code for the ARMS Volunteer Report.
-#### org.loveincbrevard.rptvoltimesheetlog - The Report Template PHP code for the Volunteer Timesheet Log Report. Added the hours & minutes for each record. 
+#### org.loveincbrevard.rptvoltimesheetlog - The Report Template PHP code for the Volunteer Timesheet Log Report. Added the hours & minutes for each record and the Summary Total. 
 #### README.md - This file.
