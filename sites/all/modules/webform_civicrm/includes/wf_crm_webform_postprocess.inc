@@ -138,20 +138,18 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       // Current employer must wait for ContactRef ids to be filled
       unset($contact['contact'][1]['employer_id']);
 
+      $newContact = empty($this->ent['contact'][$c]['id']);
+
       // Create new contact
-      if (empty($this->ent['contact'][$c]['id'])) {
+      if ($newContact) {
         $this->ent['contact'][$c]['id'] = $this->createContact($contact);
       }
-      // Update existing contact
-      else {
-        $this->updateContact($contact, $c);
+      if ($c == 1) {
+        $this->setLoggingContact();
       }
-      // Identify contact 1 as acting user if not logged in
-      if ($c == 1 && $this->ent['contact'][$c]['id'] && user_is_anonymous()) {
-        // For the sake of simple logging
-        CRM_Core_Session::singleton()->set('userID', (int) $this->ent['contact'][1]['id']);
-        // For the sake of advanced logging
-        CRM_Core_DAO::executeQuery('SET @civicrm_user_id = %1', array(1 => array($this->ent['contact'][1]['id'], 'Integer')));
+      // Update existing contact
+      if (!$newContact) {
+        $this->updateContact($contact, $c);
       }
     }
     // $this->ent['contact'] will now contain all contacts in order, with 0 as a placeholder id for any contact not saved
@@ -240,6 +238,30 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
     if (empty($this->submission->is_draft) && !empty($this->ent['contribution'][1]['id']) && $this->contributionIsIncomplete && !$this->contributionIsPayLater) {
       $this->submitIPNPayment();
     }
+      // Send receipt 
+    if (empty($this->submission->is_draft) 
+        && !empty($this->ent['contribution'][1]['id']) 
+        && !empty($this->contribution_page['is_email_receipt']) 
+        && (!$this->contributionIsIncomplete || $this->contributionIsPayLater) ) {
+      $this->sendReceipt();
+    }
+  }
+
+  /**
+   * Send receipt 
+   */
+  private function sendReceipt(){
+    // tax integration
+    if (!is_null($this->tax_rate)) {
+      $template = CRM_Core_Smarty::singleton();
+      $template->assign('dataArray', array( "{$this->tax_rate}" => $this->tax_rate/100 ));
+    }
+    if ($this->contributionIsIncomplete) {
+      $template = CRM_Core_Smarty::singleton();
+      $template->assign('is_pay_later', 1);
+    }
+    $contribute_id = $this->ent['contribution'][1]['id'];
+    wf_civicrm_api('contribution', 'sendconfirmation', array('id' => $contribute_id) + $this->contribution_page);
   }
 
   /**
@@ -1842,15 +1864,6 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
         ));
       }
     }
-    // Send receipt
-    if (!empty($this->contribution_page['is_email_receipt'])) {
-      // tax integration
-      if (!is_null($this->tax_rate)) {
-        $template = CRM_Core_Smarty::singleton();
-        $template->assign('dataArray', array( "{$this->tax_rate}" => $this->tax_rate/100 ));
-      }
-      wf_civicrm_api('contribution', 'sendconfirmation', array('id' => $id) + $this->contribution_page);
-    }
   }
 
   /**
@@ -2121,6 +2134,15 @@ class wf_crm_webform_postprocess extends wf_crm_webform_base {
       else {
         return (array) $this->rawValues[$fid];
       }
+    }
+  }
+
+  /**
+   * Identifies contact 1 as acting user for CiviCRM's advanced logging
+   */
+  public function setLoggingContact() {
+    if (!empty($this->ent['contact'][1]['id']) && user_is_anonymous()) {
+      CRM_Core_DAO::executeQuery('SET @civicrm_user_id = %1', array(1 => array($this->ent['contact'][1]['id'], 'Integer')));
     }
   }
 
