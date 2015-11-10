@@ -194,8 +194,8 @@ class CRM_Dedupe_BAO_RuleGroup extends CRM_Dedupe_DAO_RuleGroup {
     else {
       $tempTableQuery = "CREATE TEMPORARY TABLE dedupe (id1 int, id2 int, weight int, UNIQUE UI_id1_id2 (id1, id2)) ENGINE=MyISAM";
       $insertClause = "INSERT INTO dedupe (id1, id2, weight)";
-	  	// JCN
-	  	$groupByClause = (!$this->noRules) ? "GROUP BY id1, id2" : "";
+      // JCN
+      $groupByClause = (!$this->noRules) ? "GROUP BY id1, id2" : "";
       //$groupByClause = "GROUP BY id1, id2";
       $dupeCopyJoin = " JOIN dedupe_copy ON dedupe_copy.id1 = t1.column AND dedupe_copy.id2 = t2.column WHERE ";
     }

@@ -1290,7 +1290,7 @@ ORDER BY civicrm_custom_group.weight,
         if (!empty($field['element_name'])) {
           $elementName = $field['element_name'];
         } else {  //JCN
-        	continue;	
+               continue;
         }
         switch ($field['html_type']) {
           case 'Multi-Select':
