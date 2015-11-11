@@ -92,7 +92,7 @@ class org_loveincbrevard_rptbuscboarms extends CRM_Report_Form {
         'category' => array(
           'name' => 'category',
           'title' => ts('Category'),
-          'dbAlias' => "CASE cgroup_civireport.title WHEN INSTR (cgroup_civireport.title, 'Ministry') >= 0 THEN 'Ministry' WHEN INSTR (cgroup_civireport.title, 'Agency') >= 0 THEN 'Agency' WHEN cgroup_civireport.title = 'Partnerships Business' THEN 'Business' ELSE 'CBO' END ",
+          'dbAlias' => "CASE cgroup_civireport.title WHEN INSTR (cgroup_civireport.title, 'Ministry') >= 1 THEN 'Ministry' WHEN INSTR (cgroup_civireport.title, 'Agency') >= 1 THEN 'Agency' WHEN INSTR (cgroup_civireport.title, 'Business') >= 1 THEN 'Business' ELSE 'CBO' END ",
         ),
       ),
       'filters' => array(
@@ -406,7 +406,7 @@ class org_loveincbrevard_rptbuscboarms extends CRM_Report_Form {
     $sql = $this->buildQuery(TRUE);
     
 		// JCN
-		//printf("SQL %s", $sql);
+	 //printf("SQL %s", $sql);
     
     $rows = $graphRows = array();
     $this->buildRows($sql, $rows);
