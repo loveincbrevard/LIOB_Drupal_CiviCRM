@@ -92,7 +92,7 @@ class org_loveincbrevard_rptbuscboarms extends CRM_Report_Form {
         'category' => array(
           'name' => 'category',
           'title' => ts('Category'),
-          'dbAlias' => "CASE cgroup_civireport.title WHEN INSTR (cgroup_civireport.title, 'Ministry') >= 1 THEN 'Ministry' WHEN INSTR (cgroup_civireport.title, 'Agency') >= 1 THEN 'Agency' WHEN INSTR (cgroup_civireport.title, 'Business') >= 1 THEN 'Business' ELSE 'CBO' END ",
+          'dbAlias' => "CASE WHEN INSTR (cgroup_civireport.title, 'Ministry') >= 1 THEN 'Ministry' WHEN INSTR (cgroup_civireport.title, 'Agency') >= 1 THEN 'Agency' WHEN INSTR (cgroup_civireport.title, 'Business') >= 1 THEN 'Business' ELSE 'CBO' END ",
         ),
       ),
       'filters' => array(
